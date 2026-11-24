@@ -1,0 +1,137 @@
+<Window x:Class="ScreenCam.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ScreenCam Virtual Camera"
+        Width="1040" Height="660" MinWidth="880" MinHeight="580"
+        Icon="Assets/ScreenCam.ico"
+        Background="{StaticResource WindowBackgroundBrush}"
+        FontFamily="Segoe UI" FontSize="13" Foreground="#111827"
+        UseLayoutRounding="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="0,0,0,1" Padding="20,12">
+            <DockPanel LastChildFill="False">
+                <Image DockPanel.Dock="Left" Source="Assets/logo.png" Width="40" Height="40"
+                       RenderOptions.BitmapScalingMode="HighQuality" />
+                <StackPanel DockPanel.Dock="Left" Margin="12,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="ScreenCam Virtual Camera" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock Text="Broadcast any area of your screen as a webcam" Foreground="{StaticResource MutedTextBrush}" FontSize="12" />
+                </StackPanel>
+                <Button x:Name="SettingsButton" DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}"
+                        VerticalAlignment="Center" Click="SettingsButton_Click" ToolTip="Settings">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock Text="Settings" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+        </Border>
+
+        <!-- Banner for problems that need user action -->
+        <Border x:Name="Banner" Grid.Row="1" Visibility="Collapsed" Margin="20,12,20,0" Padding="12,10"
+                CornerRadius="8" BorderThickness="1"
+                Background="{StaticResource BannerWarningBrush}" BorderBrush="{StaticResource BannerWarningBorderBrush}">
+            <DockPanel>
+                <Button x:Name="BannerButton" DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}"
+                        Padding="10,4" Margin="12,0,0,0" Visibility="Collapsed" Click="BannerButton_Click" />
+                <TextBlock x:Name="BannerText" TextWrapping="Wrap" VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
+        <!-- Main content -->
+        <Grid Grid.Row="2" Margin="20,16,20,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="330" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Preview -->
+            <Border Grid.Column="0" Style="{StaticResource Card}">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource SectionTitle}" Text="LIVE PREVIEW" Margin="0" />
+                        <TextBlock x:Name="PreviewInfoText" DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                   Foreground="{StaticResource MutedTextBrush}" FontSize="12" />
+                    </DockPanel>
+                    <Border Background="{StaticResource PreviewBackgroundBrush}" CornerRadius="8" ClipToBounds="True">
+                        <Grid>
+                            <Image x:Name="PreviewImage" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear" />
+                            <StackPanel x:Name="PreviewPlaceholder" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="&#xE7F4;" FontFamily="Segoe MDL2 Assets" FontSize="40" Foreground="#4B5563"
+                                           HorizontalAlignment="Center" />
+                                <TextBlock x:Name="PreviewPlaceholderText" Text="Select a screen area to start the preview"
+                                           Foreground="#9CA3AF" Margin="0,10,0,0" HorizontalAlignment="Center" TextAlignment="Center"
+                                           TextWrapping="Wrap" MaxWidth="360" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DockPanel>
+            </Border>
+
+            <!-- Controls -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitle}" Text="SCREEN AREA" />
+                            <TextBlock x:Name="RegionText" Text="No area selected" FontWeight="SemiBold" />
+                            <TextBlock x:Name="RegionMonitorText" Foreground="{StaticResource MutedTextBrush}" FontSize="12"
+                                       TextWrapping="Wrap" Margin="0,2,0,10" />
+                            <Button x:Name="SelectAreaButton" Style="{StaticResource RoundedButton}" Click="SelectAreaButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE7A8;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center" />
+                                    <TextBlock Text="Select Screen Area" Foreground="White" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitle}" Text="CAMERA OUTPUT" />
+                            <TextBlock Text="Resolution" Margin="0,0,0,4" />
+                            <ComboBox x:Name="ResolutionBox" SelectionChanged="OutputOption_Changed" />
+                            <TextBlock Text="Frame rate" Margin="0,10,0,4" />
+                            <ComboBox x:Name="FrameRateBox" SelectionChanged="OutputOption_Changed" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource SectionTitle}" Text="VIRTUAL CAMERA" />
+                            <DockPanel Margin="0,0,0,12">
+                                <Ellipse x:Name="StatusDot" DockPanel.Dock="Left" Width="12" Height="12" Margin="0,4,10,0"
+                                         VerticalAlignment="Top" Fill="{StaticResource DangerBrush}" />
+                                <StackPanel>
+                                    <TextBlock x:Name="StatusText" Text="Stopped" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="StatusDetail" Foreground="{StaticResource MutedTextBrush}" FontSize="12"
+                                               TextWrapping="Wrap" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </DockPanel>
+                            <Button x:Name="StartButton" Style="{StaticResource CameraButton}"
+                                    Content="START VIRTUAL CAMERA" Click="StartButton_Click" />
+                            <Button x:Name="StopButton" Style="{StaticResource SecondaryButton}" Margin="0,8,0,0"
+                                    Content="Stop Virtual Camera" Click="StopButton_Click" IsEnabled="False" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="3" Background="White" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="20,6">
+            <DockPanel>
+                <TextBlock x:Name="VersionText" DockPanel.Dock="Right" Foreground="{StaticResource MutedTextBrush}" FontSize="12" />
+                <TextBlock x:Name="FooterText" Foreground="{StaticResource MutedTextBrush}" FontSize="12" TextTrimming="CharacterEllipsis" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

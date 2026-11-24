@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>ScreenCam</AssemblyName>
+    <RootNamespace>ScreenCam.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\ScreenCam.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>ScreenCam Virtual Camera</Product>
+    <Company>ScreenCam</Company>
+    <Copyright>MIT License</Copyright>
+    <Description>Broadcast any area of your desktop as a Windows webcam.</Description>
+    <TieredPGO>true</TieredPGO>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <!-- Native binaries are built by ScreenCam.Native.vcxproj and
+         ScreenCam.VirtualCameraSource.vcxproj into ..\bin\x64\<Configuration>\ -->
+    <NativeBinDir>$(MSBuildThisFileDirectory)..\bin\x64\$(Configuration)\</NativeBinDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\ScreenCam.ico" />
+  </ItemGroup>
+
+  <!-- Copy the native DLLs next to ScreenCam.exe after build and publish.
+       Items are evaluated inside the targets so DLLs produced earlier in the
+       same solution build are picked up. -->
+  <Target Name="CopyNativeBinaries" AfterTargets="Build">
+    <ItemGroup>
+      <ScreenCamNativeBinary Include="$(NativeBinDir)ScreenCam.Native.dll" Condition="Exists('$(NativeBinDir)ScreenCam.Native.dll')" />
+      <ScreenCamNativeBinary Include="$(NativeBinDir)ScreenCam.VirtualCameraSource.dll" Condition="Exists('$(NativeBinDir)ScreenCam.VirtualCameraSource.dll')" />
+      <ScreenCamNativeBinary Include="$(NativeBinDir)ScreenCam.Native.pdb" Condition="'$(Configuration)' == 'Debug' And Exists('$(NativeBinDir)ScreenCam.Native.pdb')" />
+      <ScreenCamNativeBinary Include="$(NativeBinDir)ScreenCam.VirtualCameraSource.pdb" Condition="'$(Configuration)' == 'Debug' And Exists('$(NativeBinDir)ScreenCam.VirtualCameraSource.pdb')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ScreenCamNativeBinary)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+    <Warning Condition="!Exists('$(NativeBinDir)ScreenCam.Native.dll')"
+             Text="ScreenCam.Native.dll was not found in $(NativeBinDir). Build the solution (x64) in Visual Studio or run Scripts\build.ps1 so the native projects are compiled first." />
+  </Target>
+
+  <Target Name="PublishNativeBinaries" AfterTargets="Publish">
+    <ItemGroup>
+      <ScreenCamNativePublish Include="$(NativeBinDir)ScreenCam.Native.dll" Condition="Exists('$(NativeBinDir)ScreenCam.Native.dll')" />
+      <ScreenCamNativePublish Include="$(NativeBinDir)ScreenCam.VirtualCameraSource.dll" Condition="Exists('$(NativeBinDir)ScreenCam.VirtualCameraSource.dll')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ScreenCamNativePublish)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+    <Error Condition="!Exists('$(NativeBinDir)ScreenCam.Native.dll') Or !Exists('$(NativeBinDir)ScreenCam.VirtualCameraSource.dll')"
+           Text="Native binaries are missing in $(NativeBinDir). Build the native projects first (Scripts\build.ps1 does this automatically)." />
+  </Target>
+
+</Project>

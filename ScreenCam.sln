@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScreenCam.VirtualCameraSource", "ScreenCam.VirtualCameraSource\ScreenCam.VirtualCameraSource.vcxproj", "{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScreenCam.Native", "ScreenCam.Native\ScreenCam.Native.vcxproj", "{58107EB1-83EA-4CC0-B374-329FF304A35F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenCam.App", "ScreenCam.App\ScreenCam.App.csproj", "{3445A581-FD79-4E07-8242-0B103AD1F1F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{58107EB1-83EA-4CC0-B374-329FF304A35F} = {58107EB1-83EA-4CC0-B374-329FF304A35F}
+		{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89} = {BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BDFA8FA-74B5-49C6-85DC-6EC66D361DE2}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		BUILD.md = BUILD.md
+		LICENSE = LICENSE
+		Shared\ScreenCamIds.h = Shared\ScreenCamIds.h
+		Shared\SharedFrameProtocol.h = Shared\SharedFrameProtocol.h
+		Shared\FrameConvert.h = Shared\FrameConvert.h
+		Shared\Version.h = Shared\Version.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}.Debug|x64.ActiveCfg = Debug|x64
+		{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}.Debug|x64.Build.0 = Debug|x64
+		{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}.Release|x64.ActiveCfg = Release|x64
+		{BD607FA7-2F9B-41B9-9C0C-BDAA82E10D89}.Release|x64.Build.0 = Release|x64
+		{58107EB1-83EA-4CC0-B374-329FF304A35F}.Debug|x64.ActiveCfg = Debug|x64
+		{58107EB1-83EA-4CC0-B374-329FF304A35F}.Debug|x64.Build.0 = Debug|x64
+		{58107EB1-83EA-4CC0-B374-329FF304A35F}.Release|x64.ActiveCfg = Release|x64
+		{58107EB1-83EA-4CC0-B374-329FF304A35F}.Release|x64.Build.0 = Release|x64
+		{3445A581-FD79-4E07-8242-0B103AD1F1F8}.Debug|x64.ActiveCfg = Debug|x64
+		{3445A581-FD79-4E07-8242-0B103AD1F1F8}.Debug|x64.Build.0 = Debug|x64
+		{3445A581-FD79-4E07-8242-0B103AD1F1F8}.Release|x64.ActiveCfg = Release|x64
+		{3445A581-FD79-4E07-8242-0B103AD1F1F8}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15B0F785-0341-49EB-9A5B-48375B8472FA}
+	EndGlobalSection
+EndGlobal
