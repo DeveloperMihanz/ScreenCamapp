@@ -1,0 +1,49 @@
+name: Build ScreenCam Windows App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup Visual Studio Developer Environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup -y --no-progress
+
+      - name: Build ScreenCam
+        shell: pwsh
+        run: |
+          ./Scripts/build.ps1 -Configuration Release -Installer -SelfContained
+
+      - name: Upload ScreenCam Installer and ZIP
+        if: always() && hashFiles('dist/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: ScreenCam-win-x64
+          path: dist/**
+          if-no-files-found: warn
+          retention-days: 14
